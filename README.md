@@ -1,8 +1,12 @@
 # xobe-baileys
 
+![version](https://img.shields.io/badge/version-1.0.0-blue) ![license](https://img.shields.io/badge/license-MIT-green) ![node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
+
 Library WhatsApp (Baileys v7) buat bikin bot. Ini fork dari `ourin-baileys` 9.0.21, jadi semua fiturnya sama, bedanya **nggak ada auto-follow channel**. Bot lu nggak bakal follow channel apa pun kecuali lu sendiri yang nyuruh lewat kode.
 
-Asal-usulnya: Baileys (WhiskeySockets) -> ourin-baileys (mod) -> xobe-baileys (fork ini). Detail perubahan ada di [NOTICE.md](./NOTICE.md).
+Asal-usulnya: Baileys (WhiskeySockets) -> ourin-baileys (mod) -> xobe-baileys (fork ini). Detail perubahan ada di [NOTICE.md](./NOTICE.md) dan [CHANGELOG.md](./CHANGELOG.md).
+
+> Versi 1.0.0 di sini artinya rilis stabil pertama untuk fork ini sendiri, bukan klaim sejajar sama rilis resmi Baileys. Baileys resmi masih di jalur 6.7.x per akhir Oktober 2026, dengan 7.x baru sebagai release candidate.
 
 ## Daftar isi
 
@@ -283,6 +287,33 @@ await sock.newsletterUnfollow("1203630000000000@newsletter");
 ```
 
 Daftar lengkap fungsi (grup, komunitas, VoIP, rich response, dll) ada di [docs/README-ourin-original.md](./docs/README-ourin-original.md). Itu dokumentasi bawaan ourin-baileys, jadi di sana masih ketulis `ourin-baileys`. Ganti jadi `xobe-baileys` di bagian import.
+
+## Optimasi: cache group metadata
+
+Tiap kirim pesan ke grup, library butuh tau daftar participant grup itu
+(buat enkripsi), jadi defaultnya query `groupMetadata` ke WhatsApp tiap kali
+kirim. Kalau bot lu sering kirim ke grup yang sama berulang kali dalam waktu
+singkat, ini query yang kebuang percuma.
+
+```js
+import makeWASocket, { useMultiFileAuthState, makeCachedGroupMetadata } from "xobe-baileys";
+
+const { state, saveCreds } = await useMultiFileAuthState("./session");
+const groupCache = makeCachedGroupMetadata({ ttlMs: 5 * 60 * 1000 }); // cache 5 menit
+
+const sock = makeWASocket({
+  auth: state,
+  cachedGroupMetadata: groupCache.get,
+});
+
+sock.ev.on("creds.update", saveCreds);
+
+// bungkus sock.groupMetadata biar otomatis ke-cache + auto-invalidate
+// pas ada perubahan grup (ganti nama, member masuk/keluar)
+groupCache.attach(sock);
+```
+
+Contoh lengkap ada di [examples/group-metadata-cache.js](./examples/group-metadata-cache.js).
 
 ## Pindah dari ourin-baileys
 

@@ -1,7 +1,7 @@
 {
   "name": "xobe-baileys",
   "type": "module",
-  "version": "9.0.21-xobe.1",
+  "version": "1.0.0",
   "description": "xobe-baileys: fork Baileys v7 mod (interactive message, album, newsletter, VoIP) tanpa auto-follow channel",
   "license": "MIT",
   "main": "lib/index.js",

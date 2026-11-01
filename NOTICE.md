@@ -1,4 +1,4 @@
-# Catatan
+# Catatan 
 
 gianz-baileys adalah fork dari `ourin-baileys` v9.0.21, yang merupakan mod dari
 Baileys v7 (WhiskeySockets/Baileys). Semuanya berlisensi MIT.

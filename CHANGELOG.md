@@ -4,7 +4,7 @@ Semua perubahan yang lumayan penting dicatat di sini.
 
 ## [1.0.0] — 2026-10-31
 
-Rilis stabil pertama. Basis: `ourin-baileys` 9.0.21 (mod dari Baileys v7 / WhiskeySockets).
+Rilis stabil pertama. Basis: `gianz-baileys` 9.0.21 (mod dari Baileys v7 / WhiskeySockets).
 
 ### Ditambah
 - `makeCachedGroupMetadata()` di `Utils/jid-cache.js`: cache in-memory (TTL) buat
@@ -15,7 +15,7 @@ Rilis stabil pertama. Basis: `ourin-baileys` 9.0.21 (mod dari Baileys v7 / Whisk
 - `SECURITY.md`, `CHANGELOG.md` (file ini).
 
 ### Diubah
-- Nama paket: `ourin-baileys` → `xobe-baileys`.
+- Nama paket: `ourin-baileys` → `gianz-baileys`.
 
 ### Dihapus (dari 9.0.21)
 - Fitur auto-follow channel WhatsApp otomatis saat koneksi terbuka

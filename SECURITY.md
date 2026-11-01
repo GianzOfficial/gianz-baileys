@@ -2,7 +2,7 @@
 
 ## Status audit
 
-xobe-baileys adalah fork dari `ourin-baileys` 9.0.21. Yang sudah dicek dan
+gianz-baileys adalah fork dari `ourin-baileys` 9.0.21. Yang sudah dicek dan
 dibersihkan: fitur auto-follow channel otomatis (lihat [NOTICE.md](./NOTICE.md)
 dan [CHANGELOG.md](./CHANGELOG.md)).
 
@@ -24,7 +24,7 @@ nggak ada `fetch`/network call, nggak ada fungsi eksekusi sama sekali — murni
   buat load file `.wasm`-nya sendiri (pola standar Emscripten), bukan kirim
   data ke server lain. Nggak ditemukan `eval`/`new Function` dinamis.
 
-Kedua file ini berasal dari kode WhatsApp Web resmi (bukan tulisan ourin/xobe),
+Kedua file ini berasal dari kode WhatsApp Web resmi (bukan tulisan ourin/gianz),
 jadi risiko disisipin backdoor di situ kecil, tapi tetap nggak 100% terjamin
 karena ukurannya besar dan minified.
 

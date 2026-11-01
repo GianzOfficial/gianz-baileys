@@ -20,3 +20,8 @@ export * from "./identity-change-handler.js";
 export * from "./stanza-ack.js";
 export * from "./rich-messages.js";
 export * from "./sticker-pack.js";
+export * from "./jid-cache.js";
+export * from "./jid-resolve.js";
+export * from "./message-queue.js";
+export * from "./logger-helper.js";
+export * from "./reconnect.js";

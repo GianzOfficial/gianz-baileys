@@ -281,6 +281,85 @@ groupCache.attach(sock); // auto-cache + auto-invalidate pas grup berubah
 
 ---
 
+## 🧰 Util tambahan lainnya
+
+Beberapa helper lain yang ditambahin di fork ini, di luar yang udah ada di Baileys/ourin:
+
+<details>
+<summary>🚦 <b>Rate limit / anti-spam (<code>makeMessageQueue</code>)</b></summary>
+
+Antri pesan biar dikirim dengan jeda, bukan beruntun tanpa henti — ngurangin risiko akun kena flag spam.
+
+```js
+import { makeMessageQueue } from "xobe-baileys";
+
+const queue = makeMessageQueue(sock, { delayMs: 1500, maxPerMinute: 20 });
+await queue.sendMessage(jid, { text: "halo" }); // dipakai kayak sock.sendMessage biasa
+```
+
+</details>
+
+<details>
+<summary>🏷️ <b>JID vs LID (<code>resolvePNJid</code>, <code>toJid</code>)</b></summary>
+
+WhatsApp kadang ngasih identitas user sebagai **LID** (`12345@lid`, ID internal)
+bukan **JID** nomor telepon (`628xxx@s.whatsapp.net`). Kalau LID ini langsung
+dipakai buat nge-tag orang, yang ke-mention jadi nomor acak, bukan kontak
+aslinya. `resolvePNJid` numpang mapping store bawaan socket buat nerjemahin
+LID → JID nomor telepon sebelum dipakai mention.
+
+```js
+import { resolvePNJid, toJid } from "xobe-baileys";
+
+const participants = await sock.groupMetadata(groupJid).then(m => m.participants.map(p => p.id));
+const resolved = await Promise.all(participants.map(jid => resolvePNJid(sock, jid)));
+
+await sock.sendMessage(groupJid, {
+  text: resolved.map(j => `@${j.split("@")[0]}`).join(" "),
+  mentions: resolved,
+});
+
+toJid("0812-3456-7890"); // -> "081234567890@s.whatsapp.net"
+```
+
+</details>
+
+<details>
+<summary>📝 <b>Logger siap pakai (<code>createLogger</code>)</b></summary>
+
+```js
+import { createLogger } from "xobe-baileys";
+const logger = createLogger({ level: "warn" }); // default level: "silent"
+const sock = makeWASocket({ auth: state, logger });
+```
+
+</details>
+
+<details>
+<summary>🔁 <b>Reconnect dengan backoff (<code>withReconnect</code>)</b></summary>
+
+Contoh di tutorial atas (`startBot()` dipanggil ulang langsung) bisa jadi loop
+connect cepet kalau WhatsApp lagi gangguan. `withReconnect` nambahin jeda yang
+makin lama tiap gagal beruntun.
+
+```js
+import { withReconnect, DisconnectReason } from "xobe-baileys";
+
+const reconnect = withReconnect(startBot, { baseMs: 2000, maxMs: 60_000 });
+
+sock.ev.on("connection.update", ({ connection, lastDisconnect }) => {
+  if (connection === "open") reconnect.reset();
+  if (connection === "close") {
+    const code = lastDisconnect?.error?.output?.statusCode;
+    if (code !== DisconnectReason.loggedOut) reconnect.schedule();
+  }
+});
+```
+
+</details>
+
+---
+
 ## 🧩 Contoh fitur
 
 > Semua contoh dipanggil dari dalam handler pesan. `jid` = `msg.key.remoteJid`.
@@ -526,6 +605,16 @@ Pastiin Git udah ke-install (`git --version`) dan repo ini public.
 
 **MIT**. Hak cipta asli milik pembuat Baileys dan ourin-baileys. File
 [`LICENSE`](./LICENSE) jangan dihapus.
+
+## 🙏 Credits
+
+- **[WhiskeySockets/Baileys](https://github.com/WhiskeySockets/Baileys)** — library asli yang jadi fondasi semua ini. Semua kerja berat (protokol WhatsApp, enkripsi Signal, dll) dari sini.
+- **ourin-baileys** — mod pihak ketiga yang nambahin fitur (interactive message, album, VoIP). xobe-baileys dibangun di atas basis kode ini, minus auto-follow-nya.
+- Siapa pun yang lapor bug atau bantu audit lewat [issue](../../issues) — makasih, itu yang bikin fork ini makin bisa dipercaya.
+
+Kalau mau dukung proyek asalnya, pertimbangkan kontribusi ke
+[WhiskeySockets/Baileys](https://github.com/WhiskeySockets/Baileys) langsung —
+di situlah protokol intinya dirawat.
 
 <div align="center">
 

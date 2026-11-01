@@ -1,8 +1,8 @@
 {
-  "name": "xobe-baileys",
+  "name": "gianz-baileys",
   "type": "module",
   "version": "1.1.0",
-  "description": "xobe-baileys: fork Baileys v7 mod (interactive message, album, newsletter, VoIP) tanpa auto-follow channel",
+  "description": "gianz-baileys: fork Baileys v7 mod (interactive message, album, newsletter, VoIP) tanpa auto-follow channel",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -76,7 +76,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gagadeb11116677/xobe-baileys.git"
+    "url": "git+https://github.com/GianzOfficial/gianz-baileys.git"
   },
-  "homepage": "https://github.com/gagadeb11116677/xobe-baileys"
+  "homepage": "https://github.com/GianzOfficial/gianz-baileys"
 }
